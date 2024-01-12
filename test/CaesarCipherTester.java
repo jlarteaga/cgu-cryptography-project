@@ -2,6 +2,9 @@ package test;
 
 import main.crypto.CaesarCipher;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 
 public class CaesarCipherTester {
@@ -83,6 +86,49 @@ public class CaesarCipherTester {
                 cipher.decryptString(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
 
+
+        Path test1InputFile = Path.of("test1-input.txt");
+        Path test1OutputFile = Path.of("test1-output.txt");
+        try {
+            cipher.setOffset(1);
+            cipher.encryptFile(test1InputFile, test1OutputFile);
+            String result = Files.readString(test1OutputFile);
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
+                    result,
+                    PLAIN_TEXT_TEST_SHIFTED_RIGHT);
+        } catch (Exception e) {
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
+                    e.toString(),
+                    PLAIN_TEXT_TEST_SHIFTED_RIGHT);
+            e.printStackTrace();
+        }
+        try {
+            Files.deleteIfExists(test1OutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Path test2InputFile = Path.of("test2-input.txt");
+        Path test2OutputFile = Path.of("test2-output.txt");
+        try {
+            cipher.setOffset(1);
+            cipher.decryptFile(test2InputFile, test2OutputFile);
+            String result = Files.readString(test2OutputFile);
+            BaseTester.test("[encodeFile] should shift test2-input.txt characters one position backward",
+                    result,
+                    PLAIN_TEXT_TEST);
+        } catch (Exception e) {
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position backward",
+                    e.toString(),
+                    PLAIN_TEXT_TEST);
+            e.printStackTrace();
+        }
+        try {
+            Files.deleteIfExists(test2OutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         BaseTester.finishTest(CaesarCipherTester.class.getName(), startedAt);
     }
