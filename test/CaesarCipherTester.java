@@ -29,13 +29,24 @@ public class CaesarCipherTester {
 
         CaesarCipher cipher = new CaesarCipher(CaesarCipherTester.alphabet, 0);
 
+        testCipherWithExtraneousCharacter(cipher);
+        testBasicTransformations(cipher);
+        testBorderCasesForOffsets(cipher);
+        testFileTransformations(cipher);
+
+        BaseTester.finishTest(CaesarCipherTester.class.getName(), startedAt);
+    }
+
+    private static void testCipherWithExtraneousCharacter(CaesarCipher cipher) {
         BaseTester.test("[encryptString] should ignore characters outside the alphabet",
                 cipher.encryptString("aqbwcrdteyf,!@%"),
                 PLAIN_TEXT_TEST);
         BaseTester.test("[decryptString] should ignore characters outside the alphabet",
                 cipher.decryptString("aqbwcrdteyf,!@%"),
                 PLAIN_TEXT_TEST);
+    }
 
+    private static void testBasicTransformations(CaesarCipher cipher) {
         cipher.setOffset(1);
         BaseTester.test("[encryptString] should move all characters one position forward",
                 cipher.encryptString(PLAIN_TEXT_TEST),
@@ -43,7 +54,9 @@ public class CaesarCipherTester {
         BaseTester.test("[decryptString] should move all characters one position backward",
                 cipher.decryptString(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
+    }
 
+    private static void testBorderCasesForOffsets(CaesarCipher cipher) {
         cipher.setOffset(CaesarCipherTester.alphabet.length);
         BaseTester.test(
                 "[encryptString] should return the same string when the offset is equals to the size of the alphabet",
@@ -85,8 +98,9 @@ public class CaesarCipherTester {
                 "[decryptString] should gracefully handle positive offsets greater than the size of the alphabet",
                 cipher.decryptString(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
+    }
 
-
+    private static void testFileTransformations(CaesarCipher cipher) {
         Path test1InputFile = Path.of("test1-input.txt");
         Path test1OutputFile = Path.of("test1-output.txt");
         try {
@@ -108,7 +122,6 @@ public class CaesarCipherTester {
             e.printStackTrace();
         }
 
-
         Path test2InputFile = Path.of("test2-input.txt");
         Path test2OutputFile = Path.of("test2-output.txt");
         try {
@@ -129,8 +142,6 @@ public class CaesarCipherTester {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        BaseTester.finishTest(CaesarCipherTester.class.getName(), startedAt);
     }
 
 }
