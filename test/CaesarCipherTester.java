@@ -34,7 +34,7 @@ public class CaesarCipherTester {
         testBorderCasesForOffsets(cipher);
         testFileTransformations(cipher);
 
-        BaseTester.finishTest(CaesarCipherTester.class.getName(), startedAt);
+        BaseTester.finishTest(startedAt);
     }
 
     private static void testCipherWithExtraneousCharacter(CaesarCipher cipher) {

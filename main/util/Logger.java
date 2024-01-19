@@ -8,11 +8,7 @@ public class Logger {
     private Logger() {
     }
 
-    public static void info() {
-        System.out.println();
-    }
-
     public static void info(String message) {
-        System.out.println(message);
+        System.out.print(message);
     }
 }

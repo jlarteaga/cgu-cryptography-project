@@ -101,7 +101,7 @@ public class CaesarCipher implements Cipher {
     private void shiftCharactersInFile(Path input, Path output, int delta) {
         FileValidator.validateThatExists(input);
         FileValidator.validateThatIsRegularFile(input);
-        FileValidator.validateThatDoesNotExists(output);
+        FileValidator.validateThatDoesNotExist(output);
 
         ByteBuffer inputBuffer = ByteBuffer.allocate(this.batchSize);
         ByteBuffer outputBuffer = ByteBuffer.allocate(this.batchSize);
