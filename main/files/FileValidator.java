@@ -35,7 +35,7 @@ public class FileValidator {
         }
     }
 
-    public static void validateThatDoesNotExists(Path path) {
+    public static void validateThatDoesNotExist(Path path) {
         if (Files.exists(path)) {
             throw new RuntimeException(String.format(FILE_NOT_FOUND_ERROR_MESSAGE, path));
         }
