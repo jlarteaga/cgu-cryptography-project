@@ -1,4 +1,5 @@
 = Cryptology Project
+:toc:
 
 == Requirements
 
@@ -22,14 +23,14 @@ If the user selects brute force, then the program must independently enumerate t
 
 1. **Cryptoanalysis by statistical analysis**
 
-The user should be able to choose one of two cryptanalysis methods.
-If the user selects statistical analysis mode, then prompt the user to load an additional text file in plaintext, preferably by the same author and in the same style.
-Based on the contents of the second file, the program should compile statistics on the occurrence of characters and then try to use these statistics to perform cryptanalysis of the ciphertext.
+- The user should be able to choose one of two cryptanalysis methods.
+- If the user selects statistical analysis mode, then prompt the user to load an additional text file in plaintext, preferably by the same author and in the same style.
+- Based on the contents of the second file, the program should compile statistics on the occurrence of characters and then try to use these statistics to perform cryptanalysis of the ciphertext.
 
 2. **User interface**
 
-Make dialog boxes for interaction with the user at your discretion.
-If desired, you can use the Swing and JavaFX graphic frameworks.
+- Make dialog boxes for interaction with the user at your discretion.
+- If desired, you can use the Swing and JavaFX graphic frameworks.
 
 == Implementation design
 
