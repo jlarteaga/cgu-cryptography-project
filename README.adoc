@@ -1,6 +1,6 @@
 = Cryptology Project
 
-== Requirements:
+== Requirements
 
 - Write a program that works with Caesar ciphers.
 - The lexicographic alphabet consist of all letters of the English alphabet as well as punctuation marks (.,":-!?SPACE).
@@ -30,3 +30,9 @@ Based on the contents of the second file, the program should compile statistics 
 
 Make dialog boxes for interaction with the user at your discretion.
 If desired, you can use the Swing and JavaFX graphic frameworks.
+
+== Implementation design
+
+=== Class diagram
+
+image::docs/class-diagram.png[]

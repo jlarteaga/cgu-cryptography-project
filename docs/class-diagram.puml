@@ -1,0 +1,42 @@
+@startuml
+
+abstract class LanguageDetector {
+    String language
+    {abstract} boolean belongsToLanguage(String filePath, boolean quickCheck)
+}
+
+class NGramLanguageDetector extends LanguageDetector {}
+
+class MostCommonWordsLanguageDetector extends LanguageDetector {}
+
+interface Cipher {
+    encryptFile(Path input, Path output)
+    decryptFile(Path input, Path output)
+
+    String encryptString(String plainText)
+    String decryptString(String encryptedText)
+}
+
+class CaesarCipher implements Cipher {
+    Map<Character, Integer> alphabetIndex;
+    char[] alphabet;
+    int offset;
+
+    CaesarCipher(char[] alphabet, int offset)
+    setOffset(int offset)
+    setBatchSize(int batchSize)
+    - Character shiftCharacter(char character, int delta)
+    - String shiftCharactersInString(String input, int delta)
+    - void shiftCharactersInFile(Path input, Path output, int delta)
+}
+
+class FileValidator
+{
+    {static} void validateThatIsDirectory(Path path)
+    {static} void validateThatIsRegularFile(Path path)
+    {static} void validateThatFileExists(Path path)
+    {static} void validateThatFileDoesNotExist(Path path)
+}
+
+CaesarCipher - FileValidator
+@enduml
