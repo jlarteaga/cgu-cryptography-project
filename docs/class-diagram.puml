@@ -2,7 +2,7 @@
 
 abstract class LanguageDetector {
     String language
-    abstract boolean belongsToLanguage(String filePath, boolean quickCheck)
+    {abstract} boolean belongsToLanguage(String filePath, boolean quickCheck)
 }
 
 class NGramLanguageDetector extends LanguageDetector {}
@@ -24,5 +24,19 @@ class CaesarCipher implements Cipher {
 
     CaesarCipher(char[] alphabet, int offset)
     setOffset(int offset)
+    setBatchSize(int batchSize)
+    - Character shiftCharacter(char character, int delta)
+    - String shiftCharactersInString(String input, int delta)
+    - void shiftCharactersInFile(Path input, Path output, int delta)
 }
+
+class FileValidator
+{
+    {static} void validateThatIsDirectory(Path path)
+    {static} void validateThatIsRegularFile(Path path)
+    {static} void validateThatFileExists(Path path)
+    {static} void validateThatFileDoesNotExist(Path path)
+}
+
+CaesarCipher - FileValidator
 @enduml
