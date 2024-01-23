@@ -1,24 +1,37 @@
 @startuml
 
 interface Cipher {
-    encryptFile(Path input, Path output)
-    decryptFile(Path input, Path output)
+    String encrypt(String plainText)
+    String decrypt(String encryptedText)
+}
 
-    String encryptString(String plainText)
-    String decryptString(String encryptedText)
+class SubstitutionCipher implements Cipher {
+    - char[] baseAlphabet;
+    - char[] cipherAlphabet;
+    - Map<Character, Integer> encryptionAlphabetMapping;
+    - Map<Character, Integer> decryptionAlphabetMapping;
+
+    SubstitutionCipher(char[] baseAlphabet, char[] cipherAlphabet)
+    - {static} String substituteString(String input, Map<Character, Character> alphabetMapping)
+    void setAlphabets(char[] baseAlphabet, char[] cipherAlphabet)
+    void setBaseAlphabet(char[] baseAlphabet)
+    void setCipherAlphabet(char[] cipherAlphabet)
+    int getAlphabetSize()
+    char[] getBaseAlphabet()
+    char[] getCipherAlphabet()
+    - void buildAlphabetMappings()
 }
 
 class CaesarCipher implements Cipher {
-    Map<Character, Integer> alphabetIndex;
-    char[] alphabet;
+    SubstitutionCipher innerCipher
     int offset;
 
     CaesarCipher(char[] alphabet, int offset)
+    - {static} void validateAlphabet(char[] alphabet)
+    - {static} void normalizeOffset(int offset, alphabet[])
+    - {static} char[] generateCipherAlphabet(char[] baseAlphabet, int normalizedOffset)
     setOffset(int offset)
-    setBatchSize(int batchSize)
-    - Character shiftCharacter(char character, int delta)
-    - String shiftCharactersInString(String input, int delta)
-    - void shiftCharactersInFile(Path input, Path output, int delta)
+
 }
 
 class FileValidator
@@ -29,5 +42,5 @@ class FileValidator
     {static} void validateThatFileDoesNotExist(Path path)
 }
 
-CaesarCipher - FileValidator
+CaesarCipher - SubstitutionCipher
 @enduml

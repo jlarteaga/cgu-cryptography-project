@@ -1,13 +1,8 @@
 package main.crypto;
 
-import java.nio.file.Path;
-
 public interface Cipher {
-    void encryptFile(Path input, Path output);
 
-    void decryptFile(Path input, Path output);
+    String encrypt(String plaintext);
 
-    String encryptString(String plainText);
-
-    String decryptString(String encryptedText);
+    String decrypt(String encryptedText);
 }
