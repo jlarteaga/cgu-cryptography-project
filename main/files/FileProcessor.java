@@ -21,16 +21,34 @@ public class FileProcessor {
         this.defaultCharset = defaultCharset;
     }
 
+    private static void validateBatchSize(int batchSize) {
+        if (batchSize < 1) {
+            throw new IllegalArgumentException("Batch processing size should be at least 1");
+        }
+    }
+
     private static void validateCharset(Charset charset) {
         if (charset == null) {
             throw new IllegalArgumentException("the charset must not be null");
         }
     }
 
-    private static void validateBatchSize(int batchSize) {
-        if (batchSize < 1) {
-            throw new IllegalArgumentException("Batch processing size should be at least 1");
-        }
+    public int getBatchSize() {
+        return this.batchSize;
+    }
+
+    public void setBatchSize(int batchSize) {
+        FileProcessor.validateBatchSize(batchSize);
+        this.batchSize = batchSize;
+    }
+
+    public Charset getDefaultCharset() {
+        return this.defaultCharset;
+    }
+
+    public void setDefaultCharset(Charset defaultCharset) {
+        FileProcessor.validateCharset(defaultCharset);
+        this.defaultCharset = defaultCharset;
     }
 
     public void transformFile(Path input, Path output, UnaryOperator<String> transformer) {
@@ -41,7 +59,7 @@ public class FileProcessor {
         ByteBuffer inputBuffer = ByteBuffer.allocate(this.batchSize);
         ByteBuffer outputBuffer = ByteBuffer.allocate(this.batchSize);
 
-        Path createdOutput = null;
+        Path createdOutput;
 
         try {
             createdOutput = Files.createFile(output);
@@ -49,12 +67,9 @@ public class FileProcessor {
             throw new FileCreationException(output);
         }
 
-        try (
-                RandomAccessFile inputFile = new RandomAccessFile(input.toString(), "r");
-                RandomAccessFile outputFile = new RandomAccessFile(createdOutput.toString(), "rw");
-                SeekableByteChannel inputChannel = inputFile.getChannel();
-                SeekableByteChannel outputChannel = outputFile.getChannel()
-        ) {
+        try (RandomAccessFile inputFile = new RandomAccessFile(input.toString(),
+                "r"); RandomAccessFile outputFile = new RandomAccessFile(createdOutput.toString(),
+                "rw"); SeekableByteChannel inputChannel = inputFile.getChannel(); SeekableByteChannel outputChannel = outputFile.getChannel()) {
             int readBytes = inputChannel.read(inputBuffer);
             while (readBytes > -1) {
                 inputBuffer.flip();
