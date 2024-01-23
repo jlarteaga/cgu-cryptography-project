@@ -35,6 +35,7 @@ public class CaesarCipherTester {
     }
 
     private static void testCipherWithExtraneousCharacter(CaesarCipher cipher) {
+        cipher.setOffset(0);
         BaseTester.test("[encryptString] should ignore characters outside the alphabet",
                 cipher.encryptString("aqbwcrdteyf,!@%"),
                 PLAIN_TEXT_TEST);
@@ -100,8 +101,9 @@ public class CaesarCipherTester {
     private static void testFileTransformations(CaesarCipher cipher) {
         Path test1InputFile = Path.of("test1-input.txt");
         Path test1OutputFile = Path.of("test1-output.txt");
+        cipher.setOffset(1);
+
         try {
-            cipher.setOffset(1);
             cipher.encryptFile(test1InputFile, test1OutputFile);
             String result = Files.readString(test1OutputFile);
             BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
@@ -113,6 +115,7 @@ public class CaesarCipherTester {
                     PLAIN_TEXT_TEST_SHIFTED_LEFT);
             e.printStackTrace();
         }
+
         try {
             Files.deleteIfExists(test1OutputFile);
         } catch (IOException e) {
@@ -134,6 +137,7 @@ public class CaesarCipherTester {
                     PLAIN_TEXT_TEST);
             e.printStackTrace();
         }
+
         try {
             Files.deleteIfExists(test2OutputFile);
         } catch (IOException e) {
