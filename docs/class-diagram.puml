@@ -34,13 +34,24 @@ class CaesarCipher implements Cipher {
 
 }
 
-class FileValidator
-{
+class FileValidator {
     {static} void validateThatIsDirectory(Path path)
     {static} void validateThatIsRegularFile(Path path)
     {static} void validateThatFileExists(Path path)
     {static} void validateThatFileDoesNotExist(Path path)
 }
 
-CaesarCipher - SubstitutionCipher
+class FileProcessor {
+    - int batchSize
+    - Charset defaultCharset
+
+    FileProcessor(int batchSize, Charset defaultCharset)
+    {static} void validateCharset(Charset charset)
+    {static} void validateBatchSize(Charset charset)
+    void transformFile(Path input, Path output, UnaryOperator<String> transformer)
+
+}
+
+FileValidator -- FileProcessor
+
 @enduml

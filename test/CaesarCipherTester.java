@@ -1,7 +1,12 @@
 package test;
 
 import main.crypto.CaesarCipher;
+import main.files.FileProcessor;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 
 public class CaesarCipherTester {
@@ -26,6 +31,7 @@ public class CaesarCipherTester {
         testCipherWithExtraneousCharacter(cipher);
         testBasicTransformations(cipher);
         testBorderCasesForOffsets(cipher);
+        testFileTransformations(cipher);
 
         BaseTester.finishTest(startedAt);
     }
@@ -92,6 +98,56 @@ public class CaesarCipherTester {
                 "[decrypt] should gracefully handle positive offsets greater than the size of the alphabet",
                 cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_RIGHT);
+    }
+
+    private static void testFileTransformations(CaesarCipher cipher) {
+        FileProcessor fileProcessor = new FileProcessor(1024, StandardCharsets.UTF_8);
+        cipher.setOffset(1);
+
+        Path test1InputFile = Path.of("test/test1-input.txt");
+        Path test1OutputFile = Path.of("test/test1-output.txt");
+
+        try {
+            fileProcessor.transformFile(test1InputFile, test1OutputFile, cipher::encrypt);
+            String result = Files.readString(test1OutputFile);
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
+                    result,
+                    PLAIN_TEXT_TEST_SHIFTED_LEFT);
+        } catch (Exception e) {
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
+                    e.toString(),
+                    PLAIN_TEXT_TEST_SHIFTED_LEFT);
+            e.printStackTrace();
+        }
+
+        try {
+            Files.deleteIfExists(test1OutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Path test2InputFile = Path.of("test/test2-input.txt");
+        Path test2OutputFile = Path.of("test/test2-output.txt");
+
+        try {
+            cipher.setOffset(1);
+            fileProcessor.transformFile(test2InputFile, test2OutputFile, cipher::decrypt);
+            String result = Files.readString(test2OutputFile);
+            BaseTester.test("[encodeFile] should shift test2-input.txt characters one position backward",
+                    result,
+                    PLAIN_TEXT_TEST);
+        } catch (Exception e) {
+            BaseTester.test("[encodeFile] should shift test1-input.txt characters one position backward",
+                    e.toString(),
+                    PLAIN_TEXT_TEST);
+            e.printStackTrace();
+        }
+
+        try {
+            Files.deleteIfExists(test2OutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
