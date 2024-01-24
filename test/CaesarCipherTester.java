@@ -1,8 +1,10 @@
 package test;
 
 import main.crypto.CaesarCipher;
+import main.files.FileProcessor;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -36,75 +38,77 @@ public class CaesarCipherTester {
 
     private static void testCipherWithExtraneousCharacter(CaesarCipher cipher) {
         cipher.setOffset(0);
-        BaseTester.test("[encryptString] should ignore characters outside the alphabet",
-                cipher.encryptString("aqbwcrdteyf,!@%"),
+        BaseTester.test("[encrypt] should ignore characters outside the alphabet",
+                cipher.encrypt("aqbwcrdteyf,!@%"),
                 PLAIN_TEXT_TEST);
-        BaseTester.test("[decryptString] should ignore characters outside the alphabet",
-                cipher.decryptString("aqbwcrdteyf,!@%"),
+        BaseTester.test("[decrypt] should ignore characters outside the alphabet",
+                cipher.decrypt("aqbwcrdteyf,!@%"),
                 PLAIN_TEXT_TEST);
     }
 
     private static void testBasicTransformations(CaesarCipher cipher) {
         cipher.setOffset(1);
-        BaseTester.test("[encryptString] should move all characters one position forward",
-                cipher.encryptString(PLAIN_TEXT_TEST),
+        BaseTester.test("[encrypt] should move all characters one position forward",
+                cipher.encrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
-        BaseTester.test("[decryptString] should move all characters one position backward",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+        BaseTester.test("[decrypt] should move all characters one position backward",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_RIGHT);
     }
 
     private static void testBorderCasesForOffsets(CaesarCipher cipher) {
         cipher.setOffset(CaesarCipherTester.alphabet.length);
         BaseTester.test(
-                "[encryptString] should return the same string when the offset is equals to the size of the alphabet",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+                "[encrypt] should return the same string when the offset is equals to the size of the alphabet",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST);
         BaseTester.test(
-                "[decryptString] should return the same string when the offset is equals to the size of the alphabet",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+                "[decrypt] should return the same string when the offset is equals to the size of the alphabet",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST);
 
         cipher.setOffset(-1);
         BaseTester.test(
-                "[encryptString] should gracefully handle negative offsets (1/2)",
-                cipher.encryptString(PLAIN_TEXT_TEST),
+                "[encrypt] should gracefully handle negative offsets (1/2)",
+                cipher.encrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_RIGHT);
         cipher.setOffset(-CaesarCipherTester.alphabet.length - 1);
         BaseTester.test(
-                "[encryptString] should gracefully handle negative offsets (2/2)",
-                cipher.encryptString(PLAIN_TEXT_TEST),
+                "[encrypt] should gracefully handle negative offsets (2/2)",
+                cipher.encrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_RIGHT);
         cipher.setOffset(CaesarCipherTester.alphabet.length + 1);
         BaseTester.test(
-                "[encryptString] should gracefully handle positive offsets greater than the size of the alphabet",
-                cipher.encryptString(PLAIN_TEXT_TEST),
+                "[encrypt] should gracefully handle positive offsets greater than the size of the alphabet",
+                cipher.encrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
 
         cipher.setOffset(-1);
         BaseTester.test(
-                "[decryptString] should gracefully handle negative offsets (1/2)",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+                "[decrypt] should gracefully handle negative offsets (1/2)",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
         cipher.setOffset(-CaesarCipherTester.alphabet.length - 1);
         BaseTester.test(
-                "[decryptString] should gracefully handle negative offsets (2/2)",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+                "[decrypt] should gracefully handle negative offsets (2/2)",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_LEFT);
         cipher.setOffset(CaesarCipherTester.alphabet.length + 1);
         BaseTester.test(
-                "[decryptString] should gracefully handle positive offsets greater than the size of the alphabet",
-                cipher.decryptString(PLAIN_TEXT_TEST),
+                "[decrypt] should gracefully handle positive offsets greater than the size of the alphabet",
+                cipher.decrypt(PLAIN_TEXT_TEST),
                 PLAIN_TEXT_TEST_SHIFTED_RIGHT);
     }
 
     private static void testFileTransformations(CaesarCipher cipher) {
-        Path test1InputFile = Path.of("test1-input.txt");
-        Path test1OutputFile = Path.of("test1-output.txt");
+        FileProcessor fileProcessor = new FileProcessor(1024, StandardCharsets.UTF_8);
         cipher.setOffset(1);
 
+        Path test1InputFile = Path.of("test/test1-input.txt");
+        Path test1OutputFile = Path.of("test/test1-output.txt");
+
         try {
-            cipher.encryptFile(test1InputFile, test1OutputFile);
+            fileProcessor.transformFile(test1InputFile, test1OutputFile, cipher::encrypt);
             String result = Files.readString(test1OutputFile);
             BaseTester.test("[encodeFile] should shift test1-input.txt characters one position forward",
                     result,
@@ -122,11 +126,12 @@ public class CaesarCipherTester {
             e.printStackTrace();
         }
 
-        Path test2InputFile = Path.of("test2-input.txt");
-        Path test2OutputFile = Path.of("test2-output.txt");
+        Path test2InputFile = Path.of("test/test2-input.txt");
+        Path test2OutputFile = Path.of("test/test2-output.txt");
+
         try {
             cipher.setOffset(1);
-            cipher.decryptFile(test2InputFile, test2OutputFile);
+            fileProcessor.transformFile(test2InputFile, test2OutputFile, cipher::decrypt);
             String result = Files.readString(test2OutputFile);
             BaseTester.test("[encodeFile] should shift test2-input.txt characters one position backward",
                     result,
