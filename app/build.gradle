@@ -24,7 +24,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'cryptology.App'
+    mainClass = 'cryptologyapp.App'
 }
 
 test {

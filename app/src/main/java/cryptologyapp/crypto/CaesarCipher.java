@@ -1,4 +1,4 @@
-package main.crypto;
+package cryptologyapp.crypto;
 
 public class CaesarCipher implements Cipher {
 

@@ -1,4 +1,4 @@
-package main.files;
+package cryptologyapp.files;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
