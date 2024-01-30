@@ -79,14 +79,16 @@ class NGramLanguageModel {
 
     {static} void validateNGramSize(int nGramSize)
     {static} void validateFrequencyMap(Map frequencyMap, int nGramSize)
-    {static} Map<String, Double> generateProbablityMap(Map frequencyMap, int nGramSize)
+    {static} void validateSmoothingConstant(double smoothingConstant)
+    {static} int calculateNumberOfNGrams(int normalizedInputSize, int nGramSize)
+    {static} Map<String, Double> generateProbabilityMap(Map frequencyMap, int nGramSize)
+    {static} Map<String, Integer> buildFrequencyMap(List<String> input, Alphabet alphabet, int nGramSize) {
     double calculateProbability(String input, boolean isNormalized)
     double calculatePerplexity(String input, boolean isNormalized)
     String getLanguage()
     int getNGramSize()
     Alphabet getAlphabet()
     Map<String, Double> getProbabilityMap()
-    int calculateNumberOfNGrams(int normalizedInputSize)
 }
 
 class NGramLanguageModelManager {
