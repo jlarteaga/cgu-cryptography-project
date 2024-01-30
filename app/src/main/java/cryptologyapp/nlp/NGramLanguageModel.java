@@ -1,5 +1,6 @@
 package cryptologyapp.nlp;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,6 +131,6 @@ public class NGramLanguageModel {
     }
 
     public Map<String, Double> getProbabilityMap() {
-        return probabilityMap;
+        return Collections.unmodifiableMap(probabilityMap);
     }
 }

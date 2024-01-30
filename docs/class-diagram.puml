@@ -92,7 +92,7 @@ class NGramLanguageModel {
 class NGramLanguageModelManager {
     {static} NGramLanguageModel load(Path input)
     {static} void save(NGramLanguageModel model, Path output)
-    {static} NGramLanguageModel train(NGramLanguageModel model, Path output)
+    {static} NGramLanguageModel train(Path input)
 }
 
 FileValidator -- FileProcessor
