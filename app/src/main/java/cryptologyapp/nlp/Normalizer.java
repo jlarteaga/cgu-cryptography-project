@@ -1,32 +1,20 @@
 package cryptologyapp.nlp;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 public class Normalizer {
-    private Set<Character> alphabet;
-    private char separator;
 
-    public Normalizer(Character[] alphabet, char separator) {
-        this.alphabet = new HashSet<>(Arrays.asList(alphabet));
+    private Alphabet alphabet;
 
-        Normalizer.validateSeparator(this.alphabet, separator);
-        this.separator = separator;
-    }
-
-    private static void validateSeparator(Set<Character> alphabet, char separator) {
-        if (alphabet.contains(separator)) {
-            throw new IllegalArgumentException("The separator must not be part of the alphabet");
-        }
+    public Normalizer(Alphabet alphabet) {
+        this.alphabet = alphabet;
     }
 
     public String normalize(String input) {
         StringBuilder sb = new StringBuilder();
+        char separator = this.alphabet.getSeparator();
         boolean isLastCharacterASeparator = false;
 
         // Appends a separator to denote the beginning of the first word
-        sb.append(this.separator);
+        sb.append(separator);
         isLastCharacterASeparator = true;
 
         for (int charIdx = 0; charIdx < input.length(); charIdx++) {
@@ -39,14 +27,14 @@ public class Normalizer {
             }
 
             if (!isLastCharacterASeparator) {
-                sb.append(this.separator);
+                sb.append(separator);
                 isLastCharacterASeparator = true;
             }
         }
 
         // Appends a separator to mark the end of the last word
         if (!isLastCharacterASeparator) {
-            sb.append(this.separator);
+            sb.append(separator);
         }
         return sb.toString();
     }

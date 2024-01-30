@@ -52,14 +52,50 @@ class FileProcessor {
 
 }
 
-class Normalizer {
+class Alphabet {
     - Set<Character> alphabet
     - char separator
 
-    - {static} validateSeparator(Set<Character> alphabet, char separator)
+    - {static} Set<Character> generateAlphabetSet(char[] alphabet)
+    - {static} void validateSeparator(Set<Character> alphabet, char separator)
+    boolean contains(char character)
+    Set<Character> getAlphabetSet()
+    char getSeparator()
+}
+
+class Normalizer {
+    Alphabet alphabet
+
     String normalize(String input)
 }
 
+class NGramLanguageModel {
+    - String language
+    - int nGramSize
+    - Alphabet alphabet
+    - Map<String, Double> probabilityMap
+    - Normalizer normalizer
+
+    {static} void validateNGramSize(int nGramSize)
+    {static} void validateFrequencyMap(Map frequencyMap, int nGramSize)
+    {static} Map<String, Double> generateProbablityMap(Map frequencyMap, int nGramSize)
+    double calculateProbability(String input, boolean isNormalized)
+    double calculatePerplexity(String input, boolean isNormalized)
+    String getLanguage()
+    int getNGramSize()
+    Alphabet getAlphabet()
+    Map<String, Double> getProbabilityMap()
+    int calculateNumberOfNGrams(int normalizedInputSize)
+}
+
+class NGramLanguageModelManager {
+    {static} NGramLanguageModel load(Path input)
+    {static} void save(NGramLanguageModel model, Path output)
+    {static} NGramLanguageModel train(NGramLanguageModel model, Path output)
+}
+
 FileValidator -- FileProcessor
+NGramLanguageModel -- Normalizer
+Alphabet -- Normalizer
 
 @enduml

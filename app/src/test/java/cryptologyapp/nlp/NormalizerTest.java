@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NormalizerTest {
 
-    static final Character[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f'};
+    static final char[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f'};
     static final char SEPARATOR = '_';
 
     @Test
     void testBasicNormalization() {
-        Normalizer normalizer = new Normalizer(NormalizerTest.ALPHABET, NormalizerTest.SEPARATOR);
+        Alphabet alphabet = new Alphabet(NormalizerTest.ALPHABET, NormalizerTest.SEPARATOR);
+        Normalizer normalizer = new Normalizer(alphabet);
 
         assertEquals("_a_",
                 normalizer.normalize("a"),
