@@ -68,6 +68,9 @@ public class NGramLanguageModel {
             baseFrequencyMap.compute(baseKey, (k, v) -> (v == null ? 0 : v) + frequency);
         }
 
+        /**
+         * Calculate probability of last letter according to the base frequency
+         */
         for (Map.Entry<String, Integer> entry : frequencyMap.entrySet()) {
             String key = entry.getKey();
             String baseKey = entry.getKey().substring(0, nGramBaseSize);
