@@ -6,7 +6,7 @@ import java.nio.file.Path;
 public class FileValidator {
 
     public static final String PATH_IS_DIRECTORY_ERROR_MESSAGE = "The path %s is a directory";
-    public static final String PATH_IS_REGULAR_FILE_ERROR_MESSAGE = "The path %s is a regular file";
+    public static final String PATH_IS_NOT_REGULAR_FILE_ERROR_MESSAGE = "The path %s is not a regular file";
     public static final String FILE_ALREADY_EXISTS_ERROR_MESSAGE = "The path %s already exists";
     public static final String FILE_NOT_FOUND_ERROR_MESSAGE = "The path %s does not exists";
 
@@ -24,7 +24,7 @@ public class FileValidator {
 
     public static void validateThatIsRegularFile(Path path) {
         if (!Files.isRegularFile(path)) {
-            throw new RuntimeException(String.format(PATH_IS_REGULAR_FILE_ERROR_MESSAGE, path.toAbsolutePath()));
+            throw new RuntimeException(String.format(PATH_IS_NOT_REGULAR_FILE_ERROR_MESSAGE, path.toAbsolutePath()));
         }
     }
 

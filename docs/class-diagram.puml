@@ -63,6 +63,13 @@ class Alphabet {
     char getSeparator()
 }
 
+class AlphabetManager {
+    {static} void save(Alphabet alphabet, Path filePath)
+    {static} Alphabet load(Path filePath)
+}
+
+AlphabetManager .. Alphabet
+
 class Normalizer {
     Alphabet alphabet
 
@@ -74,6 +81,7 @@ class NGramLanguageModel {
     - int nGramSize
     - Alphabet alphabet
     - Map<String, Double> probabilityMap
+    - Map<String, Integer> frequencyMap
     - Normalizer normalizer
     - double smoothingConstant
 
@@ -88,7 +96,7 @@ class NGramLanguageModel {
     String getLanguage()
     int getNGramSize()
     Alphabet getAlphabet()
-    Map<String, Double> getProbabilityMap()
+    Map<String, Integer> getFrequencyMap()
 }
 
 class NGramLanguageModelManager {
