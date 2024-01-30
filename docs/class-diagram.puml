@@ -52,6 +52,14 @@ class FileProcessor {
 
 }
 
+class Normalizer {
+    - Set<Character> alphabet
+    - char separator
+
+    - {static} validateSeparator(Set<Character> alphabet, char separator)
+    String normalize(String input)
+}
+
 FileValidator -- FileProcessor
 
 @enduml

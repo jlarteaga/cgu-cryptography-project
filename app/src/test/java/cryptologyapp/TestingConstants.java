@@ -1,4 +1,4 @@
-package cryptologyapp.crypto;
+package cryptologyapp;
 
 import java.io.File;
 import java.nio.file.Path;
