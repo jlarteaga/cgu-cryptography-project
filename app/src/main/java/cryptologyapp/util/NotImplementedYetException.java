@@ -1,4 +1,4 @@
-package main.util;
+package cryptologyapp.util;
 
 public class NotImplementedYetException extends RuntimeException {
 

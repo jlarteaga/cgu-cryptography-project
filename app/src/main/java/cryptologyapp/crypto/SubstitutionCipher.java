@@ -1,4 +1,4 @@
-package main.crypto;
+package cryptologyapp.crypto;
 
 import java.util.Arrays;
 import java.util.HashMap;
