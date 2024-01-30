@@ -9,16 +9,25 @@ public class NGramLanguageModel {
     private Alphabet alphabet;
     private Map<String, Double> probabilityMap;
     private Normalizer normalizer;
+    private double smoothingConstant;
 
-    public NGramLanguageModel(String language, int nGramSize, Alphabet alphabet, Map<String, Integer> frequencyMap) {
+    public NGramLanguageModel(String language, int nGramSize, Alphabet alphabet, Map<String, Integer> frequencyMap, double smoothingConstant) {
         NGramLanguageModel.validateNGramSize(nGramSize);
         NGramLanguageModel.validateFrequencyMap(frequencyMap, nGramSize);
+        NGramLanguageModel.validateSmoothingConstant(smoothingConstant);
 
         this.normalizer = new Normalizer(alphabet);
         this.language = language;
         this.nGramSize = nGramSize;
         this.alphabet = alphabet;
         this.probabilityMap = NGramLanguageModel.generateProbabilityMap(frequencyMap, nGramSize);
+        this.smoothingConstant = smoothingConstant;
+    }
+
+    private static void validateSmoothingConstant(double smoothingConstant) {
+        if (smoothingConstant < 0.0 || smoothingConstant > 1.0) {
+            throw new IllegalArgumentException("Smoothing constant must be between 0.0 and 1.0");
+        }
     }
 
     private static void validateNGramSize(int nGramSize) {
@@ -99,7 +108,7 @@ public class NGramLanguageModel {
         int nGramCount = this.calculateNumberOfNGrams(input.length());
         for (int i = 0; i < nGramCount; i++) {
             String nGram = input.substring(i, i + this.nGramSize);
-            probability *= this.probabilityMap.getOrDefault(nGram, 0.0);
+            probability *= this.probabilityMap.getOrDefault(nGram, this.smoothingConstant);
         }
         return probability;
     }

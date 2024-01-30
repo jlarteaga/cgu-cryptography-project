@@ -61,6 +61,7 @@ class NGramLanguageModelTest {
         put("cb", 0.2);
         put("cc", 0.4);
     }};
+    static final double SMOOTHING_CONSTANT = 0.0001;
 
     final static String NOT_NORMALIZED_INPUT = "abc";
     final static String NORMALIZED_INPUT = "_abc_";
@@ -77,7 +78,8 @@ class NGramLanguageModelTest {
         NGramLanguageModel model = new NGramLanguageModel("test language",
                 2,
                 alphabet,
-                NGramLanguageModelTest.FREQUENCY_MAP
+                NGramLanguageModelTest.FREQUENCY_MAP,
+                NGramLanguageModelTest.SMOOTHING_CONSTANT
         );
         Map<String, Double> probabilityMap = model.getProbabilityMap();
 
@@ -93,7 +95,8 @@ class NGramLanguageModelTest {
         NGramLanguageModel model = new NGramLanguageModel("test language",
                 2,
                 alphabet,
-                NGramLanguageModelTest.FREQUENCY_MAP
+                NGramLanguageModelTest.FREQUENCY_MAP,
+                NGramLanguageModelTest.SMOOTHING_CONSTANT
         );
         assertEquals(EXPECTED_INPUT_PROBABILITY, model.calculateProbability(NOT_NORMALIZED_INPUT, false));
         assertEquals(EXPECTED_INPUT_PROBABILITY, model.calculateProbability(NORMALIZED_INPUT, true));
@@ -105,7 +108,8 @@ class NGramLanguageModelTest {
         NGramLanguageModel model = new NGramLanguageModel("test language",
                 2,
                 alphabet,
-                NGramLanguageModelTest.FREQUENCY_MAP
+                NGramLanguageModelTest.FREQUENCY_MAP,
+                NGramLanguageModelTest.SMOOTHING_CONSTANT
         );
         assertEquals(EXPECTED_INPUT_PERPLEXITY, model.calculatePerplexity(NOT_NORMALIZED_INPUT, false));
         assertEquals(EXPECTED_INPUT_PERPLEXITY, model.calculatePerplexity(NORMALIZED_INPUT, true));

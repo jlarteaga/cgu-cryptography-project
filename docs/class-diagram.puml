@@ -75,6 +75,7 @@ class NGramLanguageModel {
     - Alphabet alphabet
     - Map<String, Double> probabilityMap
     - Normalizer normalizer
+    - double smoothingConstant
 
     {static} void validateNGramSize(int nGramSize)
     {static} void validateFrequencyMap(Map frequencyMap, int nGramSize)
