@@ -8,12 +8,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileTester {
+public class Files {
 
     /**
      * Included to hide the implicit public constructor
      */
-    private FileTester() {
+    private Files() {
     }
 
     public static void assertFileContent(List<String> expectedFileLines, Path filePath) {

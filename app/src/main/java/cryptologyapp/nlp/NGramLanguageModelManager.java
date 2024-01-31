@@ -1,15 +1,11 @@
 package cryptologyapp.nlp;
 
 import cryptologyapp.files.FileValidator;
-import cryptologyapp.util.NotImplementedYetException;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NGramLanguageModelManager {
 
@@ -19,8 +15,47 @@ public class NGramLanguageModelManager {
     private NGramLanguageModelManager() {
     }
 
-    public static NGramLanguageModel load(Path file) {
-        throw new NotImplementedYetException();
+    public static NGramLanguageModel load(Alphabet alphabet, Path filePath) {
+        filePath = filePath.toAbsolutePath();
+        FileValidator.validateThatExists(filePath);
+        FileValidator.validateThatIsRegularFile(filePath);
+
+        try (FileInputStream fis = new FileInputStream(filePath.toFile());
+             InputStreamReader reader = new InputStreamReader(fis);
+             BufferedReader bufferedReader = new BufferedReader(reader)) {
+            String language;
+            String nGramSize;
+            Map<String, Integer> frequencyMap = new TreeMap<>();
+            String smoothing;
+
+            language = bufferedReader.readLine();
+            nGramSize = bufferedReader.readLine();
+            smoothing = bufferedReader.readLine();
+
+            if (language == null || nGramSize == null || smoothing == null) {
+                throw new NoSuchElementException();
+            }
+
+            String nGram = bufferedReader.readLine();
+            String frequency = bufferedReader.readLine();
+            while (nGram != null && frequency != null) {
+                frequencyMap.put(nGram, Integer.parseInt(frequency));
+                nGram = bufferedReader.readLine();
+                frequency = bufferedReader.readLine();
+            }
+
+
+            return new NGramLanguageModel(language,
+                    Integer.parseInt(nGramSize),
+                    alphabet,
+                    frequencyMap,
+                    Double.parseDouble(smoothing));
+        } catch (IOException e) {
+            // Since file validations were performed before, this block should not be reached.
+            throw new RuntimeException(e);
+        } catch (NoSuchElementException | IllegalStateException e) {
+            throw new InvalidFileStructure();
+        }
     }
 
     public static void save(NGramLanguageModel model, Path filePath) {

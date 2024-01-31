@@ -3,8 +3,8 @@ package cryptologyapp.nlp;
 import cryptologyapp.TestingConstants;
 import cryptologyapp.files.Directories;
 import cryptologyapp.util.Strings;
-import cryptologyapp.utils.FileTester;
-import cryptologyapp.utils.Sets;
+import cryptologyapp.utils.Collections;
+import cryptologyapp.utils.Files;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class AlphabetManagerTest {
 
         Set<Character> expectedAlphabetSet = expectedAlphabet.getAlphabetSet();
         Set<Character> loadedAlphabetSet = loadedAlphabet.getAlphabetSet();
-        Sets.assertEquals(expectedAlphabetSet, loadedAlphabetSet);
+        Collections.assertEquals(expectedAlphabetSet, loadedAlphabetSet);
         assertEquals(expectedAlphabet.getSeparator(), loadedAlphabet.getSeparator());
     }
 
@@ -49,6 +49,6 @@ class AlphabetManagerTest {
         );
 
         AlphabetManager.save(alphabet, outputPath);
-        FileTester.assertFileContent(expectedFileOutputLines, outputPath);
+        Files.assertFileContent(expectedFileOutputLines, outputPath);
     }
 }

@@ -2,7 +2,9 @@ package cryptologyapp.nlp;
 
 import cryptologyapp.TestingConstants;
 import cryptologyapp.files.Directories;
-import cryptologyapp.utils.FileTester;
+import cryptologyapp.utils.Collections;
+import cryptologyapp.utils.Files;
+import cryptologyapp.utils.SimpleTestConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NGramLanguageModelManagerTest {
@@ -53,11 +56,10 @@ class NGramLanguageModelManagerTest {
 
     @Test
     void save() {
-        Path outputPath = TestingConstants.BASE_TEST_TMP_OUTPUT_PATH.resolve("test.model");
-        Path alphabetPath = TestingConstants.BASE_TEST_RESOURCES_PATH.resolve("simple-test.alphabet");
-        Alphabet alphabet = AlphabetManager.load(alphabetPath);
+        Path outputPath = TestingConstants.BASE_TEST_TMP_OUTPUT_PATH.resolve("test.lmodel");
+        Alphabet alphabet = AlphabetManager.load(SimpleTestConstants.ALPHABET_PATH);
         List<String> expectedFileOutputLines = new ArrayList<>() {{
-            add("test");
+            add(SimpleTestConstants.LANGUAGE_NAME);
             add("2");
             add(Double.toString(TestingConstants.SMOOTHING_CONSTANT));
             add("ab");
@@ -71,6 +73,18 @@ class NGramLanguageModelManagerTest {
                 TestingConstants.SMOOTHING_CONSTANT);
         NGramLanguageModelManager.save(model, outputPath);
 
-        FileTester.assertFileContent(expectedFileOutputLines, outputPath);
+        Files.assertFileContent(expectedFileOutputLines, outputPath);
+    }
+
+    @Test
+    void load() {
+        Path inputPath = SimpleTestConstants.LANGUAGE_MODEL_PATH;
+        Alphabet alphabet = AlphabetManager.load(SimpleTestConstants.ALPHABET_PATH);
+        NGramLanguageModel model = NGramLanguageModelManager.load(alphabet, inputPath);
+
+        assertEquals(SimpleTestConstants.LANGUAGE_NAME, model.getLanguage());
+        assertEquals(SimpleTestConstants.N_GRAM_SIZE, model.getNGramSize());
+        assertEquals(SimpleTestConstants.SMOOTHING_CONSTANT, model.getSmoothingConstant());
+        Collections.assertEquals(SimpleTestConstants.FREQUENCY_MAP, model.getFrequencyMap());
     }
 }
