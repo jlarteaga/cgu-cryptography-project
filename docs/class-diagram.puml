@@ -80,8 +80,8 @@ class NGramLanguageModel {
     - String language
     - int nGramSize
     - Alphabet alphabet
-    - Map<String, Double> probabilityMap
     - Map<String, Integer> frequencyMap
+    - Map<String, Double> probabilityMap
     - Normalizer normalizer
     - double smoothingConstant
 
@@ -97,6 +97,7 @@ class NGramLanguageModel {
     int getNGramSize()
     Alphabet getAlphabet()
     Map<String, Integer> getFrequencyMap()
+    Map<String, Double> getProbabilityMap()
 }
 
 class NGramLanguageModelManager {

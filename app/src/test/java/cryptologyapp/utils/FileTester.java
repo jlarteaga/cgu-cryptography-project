@@ -1,7 +1,8 @@
 package cryptologyapp.utils;
 
+import cryptologyapp.files.FileValidator;
+
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -16,8 +17,9 @@ public class FileTester {
     }
 
     public static void assertFileContent(List<String> expectedFileLines, Path filePath) {
+        FileValidator.validateThatExists(filePath);
         try {
-            List<String> actualLines = Files.readAllLines(filePath);
+            List<String> actualLines = java.nio.file.Files.readAllLines(filePath);
             assertEquals(expectedFileLines.size(), actualLines.size());
             for (int i = 0; i < expectedFileLines.size(); i++) {
                 String expectedLine = expectedFileLines.get(i);

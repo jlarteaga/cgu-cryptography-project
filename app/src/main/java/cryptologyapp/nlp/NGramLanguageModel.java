@@ -9,6 +9,7 @@ public class NGramLanguageModel {
     private String language;
     private int nGramSize;
     private Alphabet alphabet;
+    private Map<String, Integer> frequencyMap;
     private Map<String, Double> probabilityMap;
     private Normalizer normalizer;
     private double smoothingConstant;
@@ -22,6 +23,7 @@ public class NGramLanguageModel {
         this.language = language;
         this.nGramSize = nGramSize;
         this.alphabet = alphabet;
+        this.frequencyMap = frequencyMap;
         this.probabilityMap = NGramLanguageModel.generateProbabilityMap(frequencyMap, nGramSize);
         this.smoothingConstant = smoothingConstant;
     }
@@ -131,7 +133,7 @@ public class NGramLanguageModel {
         int nGramCount = NGramLanguageModel.calculateNumberOfNGrams(input.length(), this.nGramSize);
         for (int i = 0; i < nGramCount; i++) {
             String nGram = input.substring(i, i + this.nGramSize);
-            probability *= this.probabilityMap.getOrDefault(nGram, this.smoothingConstant);
+            probability *= this.probabilityMap.getOrDefault(nGram, this.getSmoothingConstant());
         }
         return probability;
     }
@@ -148,7 +150,15 @@ public class NGramLanguageModel {
         return alphabet;
     }
 
+    public Map<String, Integer> getFrequencyMap() {
+        return Collections.unmodifiableMap(this.frequencyMap);
+    }
+
     public Map<String, Double> getProbabilityMap() {
-        return Collections.unmodifiableMap(probabilityMap);
+        return Collections.unmodifiableMap(this.probabilityMap);
+    }
+
+    public double getSmoothingConstant() {
+        return smoothingConstant;
     }
 }
