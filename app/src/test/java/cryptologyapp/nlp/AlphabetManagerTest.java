@@ -3,6 +3,7 @@ package cryptologyapp.nlp;
 import cryptologyapp.TestingConstants;
 import cryptologyapp.files.Directories;
 import cryptologyapp.util.Strings;
+import cryptologyapp.utils.FileTester;
 import cryptologyapp.utils.Sets;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,23 +45,13 @@ class AlphabetManagerTest {
     void save() {
         Path outputPath = TestingConstants.BASE_TEST_TMP_OUTPUT_PATH.resolve("latin.alphabet");
         Alphabet alphabet = new Alphabet(TestingConstants.LATIN_ALPHABET, TestingConstants.SEPARATOR);
-        List<String> expectedFileOutputLines = new ArrayList<>() {{
-            add(String.join("", Strings.join("", alphabet.getAlphabetSet())));
-            add(Character.toString(alphabet.getSeparator()));
-        }};
+
+        List<String> expectedFileOutputLines = List.of(
+                String.join("", Strings.join("", alphabet.getAlphabetSet())),
+                Character.toString(alphabet.getSeparator())
+        );
 
         AlphabetManager.save(alphabet, outputPath);
-
-        try {
-            List<String> actualLines = Files.readAllLines(outputPath);
-            assertEquals(expectedFileOutputLines.size(), actualLines.size());
-            for (int i = 0; i < expectedFileOutputLines.size(); i++) {
-                String expectedLine = expectedFileOutputLines.get(i);
-                assertEquals(expectedLine, actualLines.get(i));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        FileTester.assertFileContent(expectedFileOutputLines, outputPath);
     }
 }
