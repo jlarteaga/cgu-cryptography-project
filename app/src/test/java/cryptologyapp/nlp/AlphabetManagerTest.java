@@ -5,6 +5,7 @@ import cryptologyapp.files.Directories;
 import cryptologyapp.util.Strings;
 import cryptologyapp.utils.Collections;
 import cryptologyapp.utils.Files;
+import cryptologyapp.utils.LatinConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class AlphabetManagerTest {
 
     @Test
     void load() {
-        Alphabet expectedAlphabet = new Alphabet(TestingConstants.LATIN_ALPHABET, TestingConstants.SEPARATOR);
+        Alphabet expectedAlphabet = new Alphabet(LatinConstants.LETTERS, TestingConstants.SEPARATOR);
         Alphabet loadedAlphabet = AlphabetManager.load(TestingConstants.LATIN_ALPHABET_FILE);
 
         Set<Character> expectedAlphabetSet = expectedAlphabet.getAlphabetSet();
@@ -41,7 +42,7 @@ class AlphabetManagerTest {
     @Test
     void save() {
         Path outputPath = TestingConstants.BASE_TEST_TMP_OUTPUT_PATH.resolve("latin.alphabet");
-        Alphabet alphabet = new Alphabet(TestingConstants.LATIN_ALPHABET, TestingConstants.SEPARATOR);
+        Alphabet alphabet = new Alphabet(LatinConstants.LETTERS, TestingConstants.SEPARATOR);
 
         List<String> expectedFileOutputLines = List.of(
                 String.join("", Strings.join("", alphabet.getAlphabetSet())),
