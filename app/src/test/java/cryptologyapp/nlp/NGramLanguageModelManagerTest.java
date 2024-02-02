@@ -4,6 +4,7 @@ import cryptologyapp.TestingConstants;
 import cryptologyapp.files.Directories;
 import cryptologyapp.utils.Collections;
 import cryptologyapp.utils.Files;
+import cryptologyapp.utils.LatinConstants;
 import cryptologyapp.utils.SimpleTestConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NGramLanguageModelManagerTest {
 
-
     @BeforeEach
     void cleanTmpOutputDirectoryBeforeEach() {
         Directories.recursivelyDeleteDirectory(TestingConstants.BASE_TEST_TMP_OUTPUT_PATH);
@@ -32,11 +32,11 @@ class NGramLanguageModelManagerTest {
 
     @Test
     void train() {
+        Alphabet alphabet = new Alphabet(LatinConstants.LETTERS, TestingConstants.SEPARATOR);
         NGramLanguageModel model = NGramLanguageModelManager.train(TestingConstants.LATIN_TRAINING_FILE,
                 "latin",
                 2,
-                TestingConstants.LATIN_ALPHABET,
-                TestingConstants.SEPARATOR,
+                alphabet,
                 TestingConstants.SMOOTHING_CONSTANT);
         double latinTextProbability = model.calculateProbability("lorem ipsum", false);
         double randomTextProbability = model.calculateProbability("abcdef", false);

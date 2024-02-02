@@ -95,12 +95,11 @@ public class NGramLanguageModelManager {
 
     }
 
-    public static NGramLanguageModel train(Path input, String language, int nGramSize, char[] alphabetCharacters, char separator, double smoothingConstant) {
+    public static NGramLanguageModel train(Path input, String language, int nGramSize, Alphabet alphabet, double smoothingConstant) {
         FileValidator.validateThatExists(input);
         FileValidator.validateThatIsRegularFile(input);
 
         try {
-            Alphabet alphabet = new Alphabet(alphabetCharacters, separator);
             List<String> fileLines = Files.readAllLines(input);
             Map<String, Integer> frequencyMap = NGramLanguageModel.buildFrequencyMap(fileLines, alphabet, nGramSize);
             return new NGramLanguageModel(language,

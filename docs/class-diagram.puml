@@ -31,7 +31,7 @@ class CaesarCipher implements Cipher {
     - {static} void normalizeOffset(int offset, alphabet[])
     - {static} char[] generateCipherAlphabet(char[] baseAlphabet, int normalizedOffset)
     setOffset(int offset)
-
+    getOffset(int offset)
 }
 
 class FileValidator {
@@ -103,7 +103,7 @@ class NGramLanguageModel {
 class NGramLanguageModelManager {
     {static} NGramLanguageModel load(Path input)
     {static} void save(NGramLanguageModel model, Path output)
-    {static} NGramLanguageModel train(Path input)
+    {static} NGramLanguageModel train(Path input, String language, int nGramSize, Alphabet alphabet, double smoothingConstant)
 }
 
 FileValidator -- FileProcessor
