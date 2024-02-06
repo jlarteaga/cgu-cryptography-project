@@ -31,7 +31,7 @@ class CaesarCipher implements Cipher {
     - {static} void normalizeOffset(int offset, alphabet[])
     - {static} char[] generateCipherAlphabet(char[] baseAlphabet, int normalizedOffset)
     setOffset(int offset)
-
+    getOffset(int offset)
 }
 
 class FileValidator {
@@ -63,6 +63,13 @@ class Alphabet {
     char getSeparator()
 }
 
+class AlphabetManager {
+    {static} void save(Alphabet alphabet, Path filePath)
+    {static} Alphabet load(Path filePath)
+}
+
+AlphabetManager .. Alphabet
+
 class Normalizer {
     Alphabet alphabet
 
@@ -73,26 +80,30 @@ class NGramLanguageModel {
     - String language
     - int nGramSize
     - Alphabet alphabet
+    - Map<String, Integer> frequencyMap
     - Map<String, Double> probabilityMap
     - Normalizer normalizer
     - double smoothingConstant
 
     {static} void validateNGramSize(int nGramSize)
     {static} void validateFrequencyMap(Map frequencyMap, int nGramSize)
-    {static} Map<String, Double> generateProbablityMap(Map frequencyMap, int nGramSize)
+    {static} void validateSmoothingConstant(double smoothingConstant)
+    {static} int calculateNumberOfNGrams(int normalizedInputSize, int nGramSize)
+    {static} Map<String, Double> generateProbabilityMap(Map frequencyMap, int nGramSize)
+    {static} Map<String, Integer> buildFrequencyMap(List<String> input, Alphabet alphabet, int nGramSize) {
     double calculateProbability(String input, boolean isNormalized)
     double calculatePerplexity(String input, boolean isNormalized)
     String getLanguage()
     int getNGramSize()
     Alphabet getAlphabet()
+    Map<String, Integer> getFrequencyMap()
     Map<String, Double> getProbabilityMap()
-    int calculateNumberOfNGrams(int normalizedInputSize)
 }
 
 class NGramLanguageModelManager {
     {static} NGramLanguageModel load(Path input)
     {static} void save(NGramLanguageModel model, Path output)
-    {static} NGramLanguageModel train(Path input)
+    {static} NGramLanguageModel train(Path input, String language, int nGramSize, Alphabet alphabet, double smoothingConstant)
 }
 
 FileValidator -- FileProcessor

@@ -37,3 +37,7 @@ If the user selects brute force, then the program must independently enumerate t
 === Class diagram
 
 image::docs/class-diagram.png[]
+
+== Training Data Sources
+
+- Latin: https://github.com/mathisve/LatinTextDataset[LatinTextDataset]

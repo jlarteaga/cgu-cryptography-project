@@ -64,4 +64,8 @@ public class CaesarCipher implements Cipher {
     public String decrypt(String encryptedText) {
         return this.innerCipher.decrypt(encryptedText);
     }
+
+    public int getOffset() {
+        return this.offset;
+    }
 }

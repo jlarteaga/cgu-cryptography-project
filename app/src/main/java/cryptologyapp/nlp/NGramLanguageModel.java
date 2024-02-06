@@ -2,12 +2,14 @@ package cryptologyapp.nlp;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NGramLanguageModel {
     private String language;
     private int nGramSize;
     private Alphabet alphabet;
+    private Map<String, Integer> frequencyMap;
     private Map<String, Double> probabilityMap;
     private Normalizer normalizer;
     private double smoothingConstant;
@@ -21,14 +23,9 @@ public class NGramLanguageModel {
         this.language = language;
         this.nGramSize = nGramSize;
         this.alphabet = alphabet;
+        this.frequencyMap = frequencyMap;
         this.probabilityMap = NGramLanguageModel.generateProbabilityMap(frequencyMap, nGramSize);
         this.smoothingConstant = smoothingConstant;
-    }
-
-    private static void validateSmoothingConstant(double smoothingConstant) {
-        if (smoothingConstant < 0.0 || smoothingConstant > 1.0) {
-            throw new IllegalArgumentException("Smoothing constant must be between 0.0 and 1.0");
-        }
     }
 
     private static void validateNGramSize(int nGramSize) {
@@ -64,6 +61,12 @@ public class NGramLanguageModel {
 
     }
 
+    private static void validateSmoothingConstant(double smoothingConstant) {
+        if (smoothingConstant < 0.0 || smoothingConstant > 1.0) {
+            throw new IllegalArgumentException("Smoothing constant must be between 0.0 and 1.0");
+        }
+    }
+
     private static Map<String, Double> generateProbabilityMap(Map<String, Integer> frequencyMap, int nGramSize) {
         Map<String, Double> probabilityMap = new HashMap<>();
         final int nGramBaseSize = nGramSize - 1;
@@ -90,6 +93,27 @@ public class NGramLanguageModel {
         return probabilityMap;
     }
 
+    public static Map<String, Integer> buildFrequencyMap(List<String> input, Alphabet alphabet, int nGramSize) {
+        Map<String, Integer> frequencyMap = new HashMap<>();
+
+        Normalizer normalizer = new Normalizer(alphabet);
+        input = input.stream().map(normalizer::normalize).toList();
+
+        for (String line : input) {
+            int nGramCount = calculateNumberOfNGrams(line.length(), nGramSize);
+            for (int i = 0; i < nGramCount; i++) {
+                String nGram = line.substring(i, i + nGramSize);
+                frequencyMap.compute(nGram, (k, v) -> (v == null ? 0 : v) + 1);
+            }
+        }
+
+        return frequencyMap;
+    }
+
+    public static int calculateNumberOfNGrams(int normalizedInputSize, int nGramSize) {
+        return normalizedInputSize - (nGramSize - 1);
+    }
+
     public double calculatePerplexity(String input, boolean isNormalized) {
         if (!isNormalized) {
             input = this.normalizer.normalize(input);
@@ -106,16 +130,12 @@ public class NGramLanguageModel {
             input = this.normalizer.normalize(input);
         }
         double probability = 1.0;
-        int nGramCount = this.calculateNumberOfNGrams(input.length());
+        int nGramCount = NGramLanguageModel.calculateNumberOfNGrams(input.length(), this.nGramSize);
         for (int i = 0; i < nGramCount; i++) {
             String nGram = input.substring(i, i + this.nGramSize);
-            probability *= this.probabilityMap.getOrDefault(nGram, this.smoothingConstant);
+            probability *= this.probabilityMap.getOrDefault(nGram, this.getSmoothingConstant());
         }
         return probability;
-    }
-
-    public int calculateNumberOfNGrams(int normalizedInputSize) {
-        return normalizedInputSize - (this.nGramSize - 1);
     }
 
     public String getLanguage() {
@@ -130,7 +150,15 @@ public class NGramLanguageModel {
         return alphabet;
     }
 
+    public Map<String, Integer> getFrequencyMap() {
+        return Collections.unmodifiableMap(this.frequencyMap);
+    }
+
     public Map<String, Double> getProbabilityMap() {
-        return Collections.unmodifiableMap(probabilityMap);
+        return Collections.unmodifiableMap(this.probabilityMap);
+    }
+
+    public double getSmoothingConstant() {
+        return smoothingConstant;
     }
 }
