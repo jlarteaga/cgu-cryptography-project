@@ -24,7 +24,7 @@ public class Collections {
         Assertions.assertEquals(expected.size(), actual.size());
         expected.forEach((k, v) -> {
             assertTrue(actual.containsKey(k));
-            Assertions.assertEquals(k, actual.get(k));
+            Assertions.assertEquals(v, actual.get(k));
         });
     }
 }

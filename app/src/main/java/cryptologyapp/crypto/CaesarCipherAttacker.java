@@ -2,7 +2,9 @@ package cryptologyapp.crypto;
 
 import cryptologyapp.nlp.NGramLanguageModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CaesarCipherAttacker {
 
@@ -16,18 +18,18 @@ public class CaesarCipherAttacker {
         this.cipher = new CaesarCipher(this.substitutionAlphabet, 0);
     }
 
-    public List<Candidate> bruteForceAttack(NGramLanguageModel model, String input) {
+    public List<SolutionCandidate> bruteForceAttack(NGramLanguageModel model, String input) {
         int possibilities = this.substitutionAlphabet.length;
-        List<Candidate> candidates = new ArrayList<>();
+        List<SolutionCandidate> solutionCandidates = new ArrayList<>();
 
         for (int offset = 0; offset < possibilities; offset++) {
             cipher.setOffset(offset);
             String decipheredOption = cipher.decrypt(input);
             double perplexity = model.calculatePerplexity(decipheredOption, false);
-            candidates.add(new Candidate(offset, perplexity));
+            solutionCandidates.add(new SolutionCandidate(offset, perplexity));
         }
 
-        Collections.sort(candidates, (ps1, ps2) -> {
+        Collections.sort(solutionCandidates, (ps1, ps2) -> {
             if (ps1.getPerplexity() < ps2.getPerplexity()) {
                 return -1;
             } else if (ps1.getPerplexity() > ps2.getPerplexity()) {
@@ -36,18 +38,7 @@ public class CaesarCipherAttacker {
             return 0;
         });
 
-        return candidates;
-    }
-
-    private static char[] generateSubstitutionAlphabet(char[] letters, char[] punctuationMarks) {
-        char[] lexicalAlphabet = new char[letters.length + punctuationMarks.length];
-        for (int i = 0; i < letters.length; i++) {
-            lexicalAlphabet[i] = letters[i];
-        }
-        for (int i = 0; i < punctuationMarks.length; i++) {
-            lexicalAlphabet[letters.length + i] = punctuationMarks[i];
-        }
-        return lexicalAlphabet;
+        return solutionCandidates;
     }
 
     private static void validateSubstitutionAlphabet(char[] substitutionAlphabet) {
@@ -59,11 +50,11 @@ public class CaesarCipherAttacker {
         }
     }
 
-    public static class Candidate {
+    public static class SolutionCandidate {
         private int offset;
         private double perplexity;
 
-        public Candidate(int offset, double perplexity) {
+        public SolutionCandidate(int offset, double perplexity) {
             this.offset = offset;
             this.perplexity = perplexity;
         }

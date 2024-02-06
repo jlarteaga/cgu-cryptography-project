@@ -60,14 +60,14 @@ class NGramLanguageModelManagerTest {
         Alphabet alphabet = AlphabetManager.load(SimpleTestConstants.ALPHABET_PATH);
         List<String> expectedFileOutputLines = new ArrayList<>() {{
             add(SimpleTestConstants.LANGUAGE_NAME);
-            add("2");
+            add(Integer.toString(SimpleTestConstants.N_GRAM_SIZE));
             add(Double.toString(TestingConstants.SMOOTHING_CONSTANT));
             add("ab");
             add("1");
         }};
 
-        NGramLanguageModel model = new NGramLanguageModel("test",
-                2,
+        NGramLanguageModel model = new NGramLanguageModel(SimpleTestConstants.LANGUAGE_NAME,
+                SimpleTestConstants.N_GRAM_SIZE,
                 alphabet,
                 Map.of("ab", 1),
                 TestingConstants.SMOOTHING_CONSTANT);

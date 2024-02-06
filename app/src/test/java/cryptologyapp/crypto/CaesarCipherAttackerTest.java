@@ -20,16 +20,15 @@ class CaesarCipherAttackerTest {
             3,
             alphabet,
             LatinConstants.SMOOTHING_CONSTANT);
-    private CaesarCipherAttacker attacker = new CaesarCipherAttacker(LatinConstants.LETTERS,
-            LatinConstants.PUNCTUATION_MARKS);
+    private CaesarCipherAttacker attacker = new CaesarCipherAttacker(LatinConstants.LEXICOGRAPHICAL_ALPHABET);
 
     @Test
     void attackWithoutOffset() {
         String latinText = "lorem ipsum";
 
-        List<CaesarCipherAttacker.Candidate> candidates = this.attacker.bruteForceAttack(this.model,
+        List<CaesarCipherAttacker.SolutionCandidate> solutionCandidates = this.attacker.bruteForceAttack(this.model,
                 latinText);
-        CaesarCipherAttacker.Candidate mostLikelySolution = candidates.getFirst();
+        CaesarCipherAttacker.SolutionCandidate mostLikelySolution = solutionCandidates.getFirst();
 
         utilCipher.setOffset(mostLikelySolution.getOffset());
         assertEquals(0, mostLikelySolution.getOffset());
@@ -43,9 +42,9 @@ class CaesarCipherAttackerTest {
         this.utilCipher.setOffset(offset);
         String offsetText = this.utilCipher.encrypt(latinText);
 
-        List<CaesarCipherAttacker.Candidate> candidates = this.attacker.bruteForceAttack(this.model,
+        List<CaesarCipherAttacker.SolutionCandidate> solutionCandidates = this.attacker.bruteForceAttack(this.model,
                 offsetText);
-        CaesarCipherAttacker.Candidate mostLikelySolution = candidates.getFirst();
+        CaesarCipherAttacker.SolutionCandidate mostLikelySolution = solutionCandidates.getFirst();
 
         utilCipher.setOffset(mostLikelySolution.getOffset());
         assertEquals(offset, mostLikelySolution.getOffset());
@@ -59,9 +58,9 @@ class CaesarCipherAttackerTest {
         this.utilCipher.setOffset(offset);
         String offsetText = this.utilCipher.encrypt(latinText);
 
-        List<CaesarCipherAttacker.Candidate> candidates = this.attacker.bruteForceAttack(this.model,
+        List<CaesarCipherAttacker.SolutionCandidate> solutionCandidates = this.attacker.bruteForceAttack(this.model,
                 offsetText);
-        CaesarCipherAttacker.Candidate mostLikelySolution = candidates.getFirst();
+        CaesarCipherAttacker.SolutionCandidate mostLikelySolution = solutionCandidates.getFirst();
 
         utilCipher.setOffset(mostLikelySolution.getOffset());
         String result = utilCipher.decrypt(offsetText);
